@@ -24,7 +24,7 @@ jobs:
 
       - name: Install dependencies & build
         run: |
-          cd your-frontend-folder
+          cd rps-multiplayer/frontend/rps-frontend
           npm install
           npm run build
 
