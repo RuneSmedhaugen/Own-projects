@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change if using a different branch
+      - main  # Change this if you use a different branch
 
 permissions:
   contents: read
@@ -32,4 +32,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: rps-multiplayer/frontend/rps-frontend/dist  # Use the correct build output folder
+          folder: rps-multiplayer/frontend/rps-frontend/dist
+          token: ${{ secrets.DEPLOY_TOKEN }}
