@@ -6,7 +6,7 @@ on:
       - main  # Change this if you use a different branch
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -34,4 +34,3 @@ jobs:
           branch: gh-pages
           folder: rps-multiplayer/frontend/rps-frontend/dist
           token: ${{ secrets.GITHUB_TOKEN }}
-
