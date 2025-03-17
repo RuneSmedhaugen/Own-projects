@@ -33,4 +33,5 @@ jobs:
         with:
           branch: gh-pages
           folder: rps-multiplayer/frontend/rps-frontend/dist
-          token: ${{ secrets.DEPLOY_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
