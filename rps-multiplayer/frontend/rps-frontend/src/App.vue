@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://rps-game.onrender.com");
 
 const playerName = ref("");
 const isWaiting = ref(true);
