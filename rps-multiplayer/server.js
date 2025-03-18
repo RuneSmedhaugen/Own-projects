@@ -162,7 +162,6 @@ function updateStats(player, result) {
     stats.losses++;
     stats.currentStreak = 0;
   }
-  // No changes for a draw
 }
 
 const port = process.env.PORT || 3000;

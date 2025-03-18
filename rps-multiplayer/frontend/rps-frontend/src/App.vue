@@ -36,8 +36,6 @@
           <p>Best Win Streak: {{ stats.bestStreak }}</p>
         </div>
       </div>
-
-      <!-- Exit button to leave queue or game -->
       <button class="exit-btn" @click="exitGame">Exit</button>
     </div>
   </div>
@@ -73,7 +71,7 @@ const selectChoice = (userChoice) => {
 };
 
 const exitGame = () => {
-  socket.emit("leaveQueue"); // Notify the server
+  socket.emit("leaveQueue");
   resetGameState();
 };
 
