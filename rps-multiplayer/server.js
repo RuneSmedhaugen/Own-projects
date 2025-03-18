@@ -1,8 +1,6 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-const cors = require("cors");
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -11,6 +9,14 @@ const io = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
+socket.on("leaveQueue", () => {
+    if (socket.lobby && lobbies[socket.lobby]) {
+      lobbies[socket.lobby] = lobbies[socket.lobby].filter(p => p !== socket);
+    }
+    socket.emit("leftQueue", "You have left the queue.");
+  });
+  
 
 // Store player stats keyed by socket.id
 const playerStats = {}; // { socket.id: { wins, losses, currentStreak, bestStreak } }
