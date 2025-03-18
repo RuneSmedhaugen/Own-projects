@@ -1,3 +1,4 @@
+/* Fun and Interactive Mobile Game Styles */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@300;400;700&display=swap');
 
 body {
@@ -31,6 +32,7 @@ body {
   border-radius: 0;
   box-shadow: none;
   animation: fadeIn 1s ease-in;
+  position: relative;
 }
 
 @keyframes fadeIn {
@@ -122,4 +124,47 @@ button:hover {
   font-size: 1.2rem;
   font-family: 'Poppins', sans-serif;
   animation: fadeIn 1.5s ease-in;
+}
+
+.lobby-list {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 250px;
+  text-align: left;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.lobby-list h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #ffcc00;
+}
+
+.lobby-item {
+  padding: 8px;
+  margin: 5px 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lobby-item:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.lobby-lock {
+  color: red;
 }
