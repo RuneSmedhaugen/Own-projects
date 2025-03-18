@@ -12,6 +12,12 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: backgroundMove 5s infinite alternate ease-in-out;
+}
+
+@keyframes backgroundMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
 }
 
 .game {
@@ -25,6 +31,12 @@ body {
   padding: 20px;
   border-radius: 0;
   box-shadow: none;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 h1 {
@@ -32,6 +44,12 @@ h1 {
   margin-bottom: 20px;
   text-shadow: 2px 2px #000;
   font-family: 'Press Start 2P', cursive;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0); }
+  to { transform: translateY(-5px); }
 }
 
 .input-container {
@@ -60,6 +78,13 @@ button {
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Press Start 2P', cursive;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
 button:hover {
@@ -82,11 +107,12 @@ button:hover {
   border-radius: 50%;
   width: 80px;
   height: 80px;
+  transition: transform 0.2s ease-in-out;
 }
 
 .choices button:hover {
   background: #ff8080;
-  transform: scale(1.2);
+  transform: scale(1.2) rotate(10deg);
 }
 
 .stats {
@@ -96,4 +122,5 @@ button:hover {
   margin-top: 20px;
   font-size: 1.2rem;
   font-family: 'Poppins', sans-serif;
+  animation: fadeIn 1.5s ease-in;
 }
