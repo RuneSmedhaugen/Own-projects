@@ -210,3 +210,10 @@ button:hover {
 .back-button:hover {
   background: darkred;
 }
+
+.timer {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #ff5722;
+  font-weight: bold;
+}

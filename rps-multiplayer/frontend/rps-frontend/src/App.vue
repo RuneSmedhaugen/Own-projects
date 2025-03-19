@@ -33,10 +33,23 @@
       <h3 v-if="opponentChoice">{{ opponentName }}: {{ opponentChoice }}</h3>
       <h2 v-if="result">{{ result }}</h2>
       <div class="choices">
-        <button @click="selectChoice('rock')">🗿</button>
-        <button @click="selectChoice('paper')">📄</button>
-        <button @click="selectChoice('scissors')">✂️</button>
-      </div>
+  <!-- Show only the selected choice if one is made -->
+  <button v-if="choice" disabled>
+    {{ choice === 'rock' ? '🗿' : choice === 'paper' ? '📄' : '✂️' }}
+  </button>
+
+  <!-- Show all choices if no choice is made -->
+  <template v-else>
+    <button @click="selectChoice('rock')">🗿</button>
+    <button @click="selectChoice('paper')">📄</button>
+    <button @click="selectChoice('scissors')">✂️</button>
+  </template>
+</div>
+
+<!-- Timer display -->
+<div v-if="timer !== null" class="timer">
+  <p>Next round starts in: {{ timer }} seconds</p>
+</div>
       <div class="stats">
         <h3>Scoreboard</h3>
         <p>Wins: {{ stats.wins }}</p>
@@ -68,6 +81,7 @@ const lobbies = ref([]);
 const showLobbyScreen = ref(false);
 const searchQuery = ref("");
 const showOnlyUnlocked = ref(false);
+const timer = ref(null);
 
 const filteredLobbies = computed(() => {
   return lobbies.value.filter(lobby => 
@@ -128,10 +142,24 @@ onMounted(() => {
     if (data.stats) stats.value = data.stats;
   });
   socket.on("result", (data) => {
-    opponentChoice.value = data.opponentChoice;
-    result.value = data.result;
-    if (data.stats) stats.value = data.stats;
-  });
+  opponentChoice.value = data.opponentChoice;
+  result.value = data.result;
+  if (data.stats) stats.value = data.stats;
+
+  // Start countdown timer
+  timer.value = 3; // Set countdown duration (e.g., 3 seconds)
+  const countdown = setInterval(() => {
+    timer.value--;
+    if (timer.value <= 0) {
+      clearInterval(countdown); // Stop the timer when it reaches 0
+      // Reset choices after the countdown
+      choice.value = null;
+      opponentChoice.value = null;
+      result.value = null;
+      timer.value = null; // Clear the timer
+    }
+  }, 1000); // Decrease timer every second
+});
   socket.on("opponentLeft", (msg, updatedStats) => {
     message.value = msg;
     resetGameState();
