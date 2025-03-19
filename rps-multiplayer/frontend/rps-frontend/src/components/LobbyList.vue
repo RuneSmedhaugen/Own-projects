@@ -3,11 +3,14 @@
       <button @click="$emit('goBack')" class="back-button">⬅ Back</button>
       <h2>Available Lobbies</h2>
       <input type="text" v-model="searchQuery" placeholder="Search for lobbies..." class="search-bar" />
-      <label>
+      <label class="checkbox-label">
         <input type="checkbox" v-model="showOnlyUnlocked" /> Show only unlocked lobbies
       </label>
-      <div v-for="lobby in filteredLobbies" :key="lobby.name" class="lobby-item" @click="joinLobby(lobby)">
-        {{ lobby.name }} ({{ lobby.creator }}) <span v-if="lobby.locked" class="lobby-lock">🔒</span>
+      <div class="lobby-list">
+        <div v-for="lobby in filteredLobbies" :key="lobby.name" class="lobby-item" @click="joinLobby(lobby)">
+          <div class="lobby-name">{{ lobby.name }}</div>
+          <div class="lobby-info">Created by: {{ lobby.creator }} <span v-if="lobby.locked" class="lobby-lock">🔒</span></div>
+        </div>
       </div>
     </div>
   </template>
@@ -45,8 +48,3 @@
     });
   });
   </script>
-  
-  <style>
-  /* Keep the styles here */
-  </style>
-  
