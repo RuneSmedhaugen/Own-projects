@@ -35,32 +35,30 @@ io.on("connection", (socket) => {
     if (!name || !name.trim()) return;
     socket.playerName = name.trim();
     lobby = lobby.trim() || "default";
-
-    // If lobby exists, check password
+  
     if (lobbies[lobby]) {
       if (lobbies[lobby].password && lobbies[lobby].password !== password) {
         socket.emit("error", "Incorrect lobby password!");
         return;
       }
     } else {
-      // Create new lobby if it doesn't exist
       lobbies[lobby] = { password, players: [], creator: name };
     }
-
+  
     socket.lobby = lobby;
     lobbies[lobby].players.push(socket);
-
+  
     console.log(`${name} joined lobby: ${lobby}`);
-
-    // Notify lobby update
+  
+    // ✅ Ensure every client gets the updated lobby list
     io.emit("lobbyList", Object.keys(lobbies).map((name) => ({
       name,
       creator: lobbies[name].creator,
       locked: lobbies[name].password ? true : false,
     })));
-
+  
     attemptMatch(lobby);
-  });
+  });  
 
   // Handle leaving queue or disconnect
   socket.on("leaveQueue", () => {
