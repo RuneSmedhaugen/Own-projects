@@ -118,5 +118,55 @@ function attemptMatch(lobby) {
   }
 }
 
+// Handle player choices and determine the winner
+socket.on("play", (choice) => {
+    if (!socket.opponent) return; // Ensure the player has an opponent
+  
+    socket.choice = choice;
+    console.log(`${socket.playerName} chose ${choice}`);
+  
+    // Check if both players have made their choices
+    if (socket.choice && socket.opponent.choice) {
+      console.log("Both players have chosen. Processing result...");
+      processGameResult(socket, socket.opponent);
+    }
+  });
+  
+  // Process the game result
+  function processGameResult(player1, player2) {
+    const result = determineWinner(player1.choice, player2.choice);
+  
+    // Send results to both players
+    player1.emit("result", {
+      yourChoice: player1.choice,
+      opponentChoice: player2.choice,
+      result,
+    });
+  
+    player2.emit("result", {
+      yourChoice: player2.choice,
+      opponentChoice: player1.choice,
+      result: result === "Win" ? "Lose" : result === "Lose" ? "Win" : "Draw",
+    });
+  
+    // Reset choices for next round
+    player1.choice = null;
+    player2.choice = null;
+  }
+  
+  // Determine the winner based on RPS rules
+  function determineWinner(p1, p2) {
+    if (p1 === p2) return "Draw";
+    if (
+      (p1 === "rock" && p2 === "scissors") ||
+      (p1 === "paper" && p2 === "rock") ||
+      (p1 === "scissors" && p2 === "paper")
+    ) {
+      return "Win";
+    }
+    return "Lose";
+  }
+  
+
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server running on port ${port}`));
