@@ -135,17 +135,47 @@ socket.on("play", (choice) => {
   function processGameResult(player1, player2) {
     const result = determineWinner(player1.choice, player2.choice);
   
+    // Initialize stats for players if not already present
+    if (!playerStats[player1.id]) {
+      playerStats[player1.id] = { wins: 0, losses: 0, draws: 0, currentStreak: 0, bestStreak: 0 };
+    }
+    if (!playerStats[player2.id]) {
+      playerStats[player2.id] = { wins: 0, losses: 0, draws: 0, currentStreak: 0, bestStreak: 0 };
+    }
+  
+    // Update stats based on the result
+    if (result === "Win") {
+      playerStats[player1.id].wins++;
+      playerStats[player1.id].currentStreak++;
+      playerStats[player1.id].bestStreak = Math.max(playerStats[player1.id].bestStreak, playerStats[player1.id].currentStreak);
+  
+      playerStats[player2.id].losses++;
+      playerStats[player2.id].currentStreak = 0;
+    } else if (result === "Lose") {
+      playerStats[player2.id].wins++;
+      playerStats[player2.id].currentStreak++;
+      playerStats[player2.id].bestStreak = Math.max(playerStats[player2.id].bestStreak, playerStats[player2.id].currentStreak);
+  
+      playerStats[player1.id].losses++;
+      playerStats[player1.id].currentStreak = 0;
+    } else if (result === "Draw") {
+      playerStats[player1.id].draws++;
+      playerStats[player2.id].draws++;
+    }
+  
     // Send results to both players
     player1.emit("result", {
       yourChoice: player1.choice,
       opponentChoice: player2.choice,
       result,
+      stats: playerStats[player1.id], // Include updated stats
     });
   
     player2.emit("result", {
       yourChoice: player2.choice,
       opponentChoice: player1.choice,
       result: result === "Win" ? "Lose" : result === "Lose" ? "Win" : "Draw",
+      stats: playerStats[player2.id], // Include updated stats
     });
   
     // Reset choices for next round
