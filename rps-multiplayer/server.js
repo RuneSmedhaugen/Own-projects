@@ -4,11 +4,12 @@ const { Server } = require("socket.io");
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "superb-jalebi-b0d721.netlify.app",
-    methods: ["GET", "POST"],
-  },
-});
+    cors: {
+      origin: ["https://superb-jalebi-b0d721.netlify.app", "http://localhost:5173"], // ✅ Add correct Netlify format & localhost for testing
+      methods: ["GET", "POST"],
+      credentials: true
+    },
+  });  
 
 // Store player stats
 const playerStats = {};
