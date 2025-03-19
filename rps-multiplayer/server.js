@@ -76,7 +76,6 @@ io.on("connection", (socket) => {
       creator: lobbies[name].creator,
       locked: lobbies[name].password ? true : false,
     })));
-  });
 
   socket.on("disconnect", () => {
     console.log(`Player disconnected: ${socket.id}`);
@@ -166,7 +165,7 @@ socket.on("play", (choice) => {
     }
     return "Lose";
   }
-  
+});
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server running on port ${port}`));
