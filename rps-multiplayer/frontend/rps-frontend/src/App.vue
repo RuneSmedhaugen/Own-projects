@@ -1,70 +1,38 @@
 <template>
-  <div class="game" v-if="!showLobbyScreen && !isInGame">
-    <h1>RPS Online</h1>
-    <div class="input-container">
-      <input type="text" v-model="playerName" placeholder="Enter your name" required />
-    </div>
-    <div class="input-container">
-      <input type="text" v-model="lobbyName" placeholder="Enter lobby name (optional)" />
-    </div>
-    <div class="input-container">
-      <input type="password" v-model="lobbyPassword" placeholder="Set password (optional)" />
-    </div>
-    <button @click="setName">Join Queue</button>
-    <button @click="showLobbyScreen = true">Find Lobbies</button>
-  </div>
-
-  <div class="lobby-screen" v-if="showLobbyScreen">
-    <button @click="showLobbyScreen = false" class="back-button">⬅ Back</button>
-    <h2>Available Lobbies</h2>
-    <input type="text" v-model="searchQuery" placeholder="Search for lobbies..." class="search-bar" />
-    <label>
-      <input type="checkbox" v-model="showOnlyUnlocked" /> Show only unlocked lobbies
-    </label>
-    <div v-for="lobby in filteredLobbies" :key="lobby.name" class="lobby-item" @click="joinLobby(lobby)">
-      {{ lobby.name }} ({{ lobby.creator }}) <span v-if="lobby.locked" class="lobby-lock">🔒</span>
-    </div>
-  </div>
-
-  <div v-if="isInGame">
-    <p>{{ message }}</p>
-    <div v-if="opponentName">
-      <h3 v-if="choice">You: {{ choice }}</h3>
-      <h3 v-if="opponentChoice">{{ opponentName }}: {{ opponentChoice }}</h3>
-      <h2 v-if="result">{{ result }}</h2>
-      <div class="choices">
-  <!-- Show only the selected choice if one is made -->
-  <button v-if="choice" disabled>
-    {{ choice === 'rock' ? '🗿' : choice === 'paper' ? '📄' : '✂️' }}
-  </button>
-
-  <!-- Show all choices if no choice is made -->
-  <template v-else>
-    <button @click="selectChoice('rock')">🗿</button>
-    <button @click="selectChoice('paper')">📄</button>
-    <button @click="selectChoice('scissors')">✂️</button>
-  </template>
-</div>
-
-<!-- Timer display -->
-<div v-if="timer !== null" class="timer">
-  <p>Next round starts in: {{ timer }} seconds</p>
-</div>
-      <div class="stats">
-        <h3>Scoreboard</h3>
-        <p>Wins: {{ stats.wins }}</p>
-        <p>Losses: {{ stats.losses }}</p>
-        <p>Current Win Streak: {{ stats.currentStreak }}</p>
-        <p>Best Win Streak: {{ stats.bestStreak }}</p>
-      </div>
-    </div>
-    <button class="exit-btn" @click="exitGame">Exit</button>
-  </div>
+<InputForm
+  v-if="!showLobbyScreen && !isInGame"
+  v-model:playerName="playerName"
+  v-model:lobbyName="lobbyName"
+  v-model:lobbyPassword="lobbyPassword"
+  @set-name="setName"
+  @show-lobby-screen="showLobbyScreen = true"
+/>
+<LobbyScreen 
+    v-if="showLobbyScreen" 
+    :lobbies="lobbies" 
+    @join-lobby="joinLobby" 
+    @back="showLobbyScreen = false" 
+  />
+  <GameScreen
+    v-if="isInGame"
+    :message="message"
+    :opponentName="opponentName"
+    :choice="choice"
+    :opponentChoice="opponentChoice"
+    :result="result"
+    :stats="stats"
+    :timer="timer"
+    @select-choice="selectChoice"
+    @exit-game="exitGame"
+  />
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { io } from "socket.io-client";
+import InputForm from "./components/InputForm.vue";
+import LobbyScreen from "./components/LobbyScreen.vue";
+import GameScreen from "./components/GameScreen.vue";
 
 const socket = io("https://own-projects.onrender.com");
 const playerName = ref("");
@@ -101,14 +69,9 @@ const setName = () => {
   message.value = "Looking for an opponent...";
 };
 
-const joinLobby = (lobby) => {
-  if (lobby.locked) {
-    const enteredPassword = prompt("Enter the lobby password:");
-    socket.emit("setName", { name: playerName.value.trim(), lobby: lobby.name, password: enteredPassword });
-  } else {
-    socket.emit("setName", { name: playerName.value.trim(), lobby: lobby.name });
-  }
-  isInGame.value = true;
+const joinLobby = ({ lobby, password }) => {
+  const payload = password ? { name: playerName.value, lobby: lobby.name, password } : { name: playerName.value, lobby: lobby.name };
+  socket.emit("setName", payload);
   showLobbyScreen.value = false;
 };
 
