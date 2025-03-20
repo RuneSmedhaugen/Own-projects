@@ -110,7 +110,7 @@ onMounted(() => {
   if (data.stats) stats.value = data.stats;
 
   // Start countdown timer
-  timer.value = 3; // Set countdown duration (e.g., 3 seconds)
+  timer.value = 3; // Set countdown duration
   const countdown = setInterval(() => {
     timer.value--;
     if (timer.value <= 0) {
@@ -119,9 +119,9 @@ onMounted(() => {
       choice.value = null;
       opponentChoice.value = null;
       result.value = null;
-      timer.value = null; // Clear the timer
+      timer.value = null;
     }
-  }, 1000); // Decrease timer every second
+  }, 1000); // Update every second
 });
   socket.on("opponentLeft", (msg, updatedStats) => {
     message.value = msg;
@@ -130,34 +130,3 @@ onMounted(() => {
   });
 });
 </script>
-
-<style>
-.toggle-lobby {
-  margin-top: 10px;
-  background: #007bff;
-  color: white;
-  font-size: 1rem;
-  padding: 8px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  border: none;
-}
-.toggle-lobby:hover {
-  background: #0056b3;
-}
-
-.exit-btn {
-  background: red;
-  color: white;
-  font-size: 1.2rem;
-  padding: 10px 15px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.exit-btn:hover {
-  background: darkred;
-}
-</style>

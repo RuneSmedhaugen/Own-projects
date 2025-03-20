@@ -47,7 +47,3 @@
     emit("exit-game");
   };
   </script>
-  
-  <style>
-  /* Add styles for the game screen here */
-  </style>

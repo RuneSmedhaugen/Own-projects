@@ -51,7 +51,3 @@
     });
   };
   </script>
-  
-  <style>
-  /* Add styles for the input form here */
-  </style>

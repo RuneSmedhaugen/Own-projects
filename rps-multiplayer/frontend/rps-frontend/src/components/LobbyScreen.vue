@@ -1,4 +1,3 @@
-<!-- filepath: c:\Users\Rune S\source\repos\Own-projects\rps-multiplayer\frontend\rps-frontend\src\components\LobbyScreen.vue -->
 <template>
   <div class="lobby-screen">
     <button @click="onBack" class="back-button">⬅ Back</button>
@@ -44,8 +43,3 @@ const onBack = () => {
   emit("back");
 };
 </script>
-
-
-<style>
-/* Add styles for the lobby screen here */
-</style>
